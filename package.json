@@ -15,5 +15,8 @@
     "url": "https://github.com/RakeGoose/blockchain/issues"
   },
   "homepage": "https://github.com/RakeGoose/blockchain#readme",
-  "description": ""
+  "description": "",
+  "dependencies": {
+    "crypto": "^1.0.1"
+  }
 }
