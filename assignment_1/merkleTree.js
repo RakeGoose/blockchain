@@ -7,7 +7,7 @@ class Transaction {
 
     // Returns a string representation of the transaction
     toString() {
-        return `${this.sender}->${this.receiver}:${this.amount}`;
+        return `${this.sender}->${this.receiver}:${this.amount}`
     }
 }
 
