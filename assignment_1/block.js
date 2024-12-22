@@ -1,50 +1,35 @@
-const crypto = require ("crypto"), SHA256 = message => crypto.createHash("sha256").update(message).digest('hex');
+const SHA256 = require("./hash");
+const merkleTree = require ('./merkleTree');
 
 class Block {
-    constructor(timestamp="", data=[]) {
-        this.timestamp = timestamp;
-        this.data = data;
-        this.hash = this.getHash();
-        this.prevHash = "";
+    constructor(index, timestamp, transactions, previousHash = '') {
+        this.index = index;
+        this.timestamp = timestamp || Date.now().toString();
+        this.transactions = transactions;
+        this.previousHash = previousHash;
+        this.merkleRoot = merkleTree(transactions);
+        this.nonce = 0;
+        this.hash = this.calculateHash();
     }
 
-    getHash() {
-        return SHA256(this.prevHash + this.timestamp +JSON.stringify(this.data));
-    }
-}
-
-class Blockchain{
-    constructor(){
-        this.chain = [new Block(Date.now().toString())];
-    }
-
-    getLastBlock(){
-        return this.chain[this.chain.length - 1];
+    calculateHash() {
+        return SHA256(
+            this.index +
+            this.previousHash +
+            this.timestamp +
+            this.merkleRoot +
+            this.nonce
+        );
     }
 
-    addBlock(block){
-        block.prevHash = this.getLastBlock().hash;
-
-        block.hash = block.getHash();
-
-        this.chain.push(Object.freeze(block));
-    }
-
-    isValid(blockchain = this){
-        for(let i = 1; i < blockchain.chain.length; i++){
-            const currentBlock = blockchain.chain[i];
-            const prevBlock = blockchain.chain[i - 1];
-
-            if(currentBlock.hash !== currentBlock.getHash() || prevBlock.hash !== currentBlock.prevHash){
-                return false;
-            }
+    mineBlock(difficulty) {
+        const target = '0'.repeat(difficulty);
+        while (this.hash.substring(0, difficulty) !== target) {
+            this.nonce++;
+            this.hash = this.calculateHash();
         }
-
-        return true;
+        console.log(`Block mined: ${this.hash}`);
     }
 }
 
-module.exports = {Block, Blockchain};
-
-
-
+module.exports = Block;
