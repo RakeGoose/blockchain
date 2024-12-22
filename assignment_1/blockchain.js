@@ -19,4 +19,27 @@ class Blockchain {
     addTransaction(Transaction) {
         this.pendingTransactions.push(Transaction);
     }
+
+    mineBlock() {
+        if (this.pendingTransactions.length < 10) {
+            console.log('Not enough transactions to mine a block.');
+            return;
+        }
+
+        const transactionsToMine = this.pendingTransactions.slice(0, 10);
+        this.pendingTransactions = this.pendingTransactions.slice(10);
+
+        const newBlock = new Block(
+            this.chain.length,
+            Date.now().toString(),
+            transactionsToMine,
+            this.getLatestBlock().hash
+        );
+        console.log('Mining block #${newBlock.index}...');
+        newBlock.mineBlock(this.difficulty);
+
+        this.chain.push(Object.freeze(newBlock));
+        console.log('Block successfully added to the chain!');
+    }
+
 }
