@@ -19,8 +19,27 @@ class RSA{
 
     static sign(privateKey, message){
         const hash = BigInt(SHA256(message));
+        return RSA.decrypt(privateKey, hash);
+    }
+
+    static verify(publicKey, message, signature){
+        const hash = BigInt(SHA256(message));
         const decryptedSign = RSA.encrypt(publicKey, signature);
         return hash === decryptedSign;
+    }
+
+    static isComposite(module_inc, c){
+        const a = 2n + BigInt(Math.floor(Math.random() * (Number(n - 4n))));
+        let x = RSA.modExp(a, c, module_inc);
+        if(x === 1n || x === n - 1n) return true;
+
+        while (c !== module_inc - 1n){
+            x = (x * x) % n;
+            c *= 2n;
+            if (x === 1n) return false;
+            if (x === n - 1n) return true;
+        }
+        return false;
     }
 
     static gcd(a, b){
