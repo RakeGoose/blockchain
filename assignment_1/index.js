@@ -1,9 +1,17 @@
-const {Block, Blockchain} = require('./block.js');
+const Blockchain = require('./blockchain');
+const Transaction = require('./transaction');
 
-const test = new Blockchain();
-test.addBlock(new Block(Date.now().toString(), {from: "Rustem", to: "Daniyal", amount: 50}));
-test.addBlock(new Block(Date.now().toString(), {from: "Rustem", to: "Azamat", amount: 70}));
-test.addBlock(new Block(Date.now().toString(), {from: "Daniyal", to: "Rustem", amount: 30}));
-test.addBlock(new Block(Date.now().toString(), {from: "Daniyal", to: "Rustem", amount: 25}));
+const blockchain = new Blockchain();
 
-console.log(test.chain)
+for(let i = 1; i <= 15; i++){
+    blockchain.addTransaction(
+        new Transaction(`Rustem ${i}`, `Daniyal ${i}`, Math.floor(Math.random()*100))
+    );
+}
+
+blockchain.mineBlock();
+blockchain.mineBlock();
+
+console.log("Is blockchain valid? ", blockchain.isValid());
+
+console.log(JSON.stringify(blockchain, null, 2));

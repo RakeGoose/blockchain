@@ -1,10 +1,13 @@
 const SHA256 = require("./hash");
 const merkleTree = require ('./merkleTree');
+const formatTimestamp = require('./utils');
+
 
 class Block {
     constructor(index, timestamp, transactions, previousHash = '') {
         this.index = index;
-        this.timestamp = timestamp || Date.now().toString();
+        this.timestamp = Date.now();
+        this.formattedTimestamp = formatTimestamp(this.timestamp);
         this.transactions = transactions;
         this.previousHash = previousHash;
         this.merkleRoot = merkleTree(transactions);
