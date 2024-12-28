@@ -1,7 +1,26 @@
+const SHA256 = require('hash');
+
 class RSA{
     static generateKeyPair(bits = 2048){
         const e = 65537;
         let a, b, module_inc, euler, c;
+    }
+
+    static encrypt(publicKey, message){
+        const {e, module_inc} = publicKey;
+        const m = BigInt(message);
+        return RSA.modExp(m, BigInt(e), BigInt(module_inc));
+    }
+
+    static decrypt(privateKey, cipherText){
+        const {c, module_inc} = privateKey;
+        return RSA.modExp(BigInt(cipherText), BigInt(c), BigInt(module_inc));
+    }
+
+    static sign(privateKey, message){
+        const hash = BigInt(SHA256(message));
+        const decryptedSign = RSA.encrypt(publicKey, signature);
+        return hash === decryptedSign;
     }
 
     static gcd(a, b){
