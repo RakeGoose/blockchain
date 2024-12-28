@@ -4,6 +4,20 @@ class RSA{
     static generateKeyPair(bits = 2048){
         const e = 65537;
         let a, b, module_inc, euler, c;
+
+        do {
+            a = RSA.generatePrime(bits / 2);
+            b = RSA.generatePrime(bits / 2);
+            module_inc = a * b;
+            euler = (a - 1n) * (b - 1n);
+        }while(RSA.gcd(e, euler) !== 1n);
+
+        c = RSA.modInverse(e, euler);
+
+        return{
+            publicKey: {e, module_inc},
+            privateKey: {c, module_inc},
+        };
     }
 
     static encrypt(publicKey, message){
@@ -26,6 +40,29 @@ class RSA{
         const hash = BigInt(SHA256(message));
         const decryptedSign = RSA.encrypt(publicKey, signature);
         return hash === decryptedSign;
+    }
+
+    static generatePrime(bits){
+        const min = 2n ** BigInt(bits - 1);
+        const max = 2n ** BigInt(bits) - 1n;
+        while(true){
+            const candidate = BigInt(Math.floor(Math.random() * Number(max - min)) + Number(min));
+            if (RSA.isPrime(candidate)) return candidate;
+        }
+    }
+
+    static isPrime(module_inc, k = 5){
+        if(module_inc <= 1n) return false;
+        if(module_inc <= 3n) return true;
+        if(module_inc % 2n === 0n || module_inc % 3n === 0n) return false;
+
+        let c = n - 1n;
+        while (c % 2n === 0n) module_inc /= 2n;
+
+        for(let i = 0; i < k; i++){
+            if(!RSA.isComposite(module_inc, c)) return false;
+        }
+        return true;
     }
 
     static isComposite(module_inc, c){
