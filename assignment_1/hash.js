@@ -1,4 +1,4 @@
-// Custom SHA-256 implementationn
+// Custom SHA-256 implementation
 function SHA256(message) {
     // Constants and helper functions for SHA-256
     const K = [
