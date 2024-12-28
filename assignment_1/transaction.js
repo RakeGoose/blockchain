@@ -5,7 +5,6 @@ class Transaction {
         this.amount = amount;
     }
 
-    // Returns a string representation of the transaction
     toString() {
         return `${this.sender}->${this.receiver}:${this.amount}`;
     }

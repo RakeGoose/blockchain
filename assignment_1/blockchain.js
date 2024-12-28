@@ -21,13 +21,13 @@ class Blockchain {
     }
 
     mineBlock() {
-        if (this.pendingTransactions.length < 10) {
+        if (this.pendingTransactions.length < 5) {
             console.log('Not enough transactions to mine a block.');
             return;
         }
 
-        const transactionsToMine = this.pendingTransactions.slice(0, 10);
-        this.pendingTransactions = this.pendingTransactions.slice(10);
+        const transactionsToMine = this.pendingTransactions.slice(0, 5);
+        this.pendingTransactions = this.pendingTransactions.slice(5);
 
         const newBlock = new Block(
             this.chain.length,
