@@ -1,7 +1,7 @@
 const Block = require('./block');
 const Transaction = require('./transaction');
-const RSA = require('rsa');
-const SHA256 = require('hash')
+const RSA = require('./rsa');
+const SHA256 = require('./hash')
 
 class Blockchain {
     constructor(difficulty = 4) {

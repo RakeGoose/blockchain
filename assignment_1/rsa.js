@@ -1,4 +1,4 @@
-const SHA256 = require('hash');
+const SHA256 = require('./hash');
 
 class RSA{
     static generateKeyPair(bits = 2048){
