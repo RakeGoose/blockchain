@@ -1,5 +1,6 @@
 const Blockchain = require('./blockchain');
 const Transaction = require('./transaction');
+const RSA = require('./rsa');
 
 const blockchain = new Blockchain();
 
